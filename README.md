@@ -1,8 +1,326 @@
 CSS방법론 (BEM, OOCSS, SMACSS)
 
+http://www.risewill.co.jp/blog/archives/5652
+
+CSS설계는 매우 중요한 것입니다.
+
+일정한 규칙이 없으면 
+각자가 다른 사고 방식에서 스타일 정의 하고 불필요한 CSS가 늘어나거나 
+본인이 아니면 모르는 규칙이 발생해 유지보수 하기 어렵게 되어 버립니다.
+
+
+그래서 다음을 의식하고 CSS 설계를 실시하는 것이 중요합니다.
+
+예측 가능한
+재사용 가능한
+유지보수가 쉬운
+확장 가능한
+
+# OOCSS
+
+## 요약
+* Object Oriented CSS (객체 지향 CSS)
+* 객체 지향에 따라 고안된 설계 방식
+* Yahoo!의 Nicole Sulivan에 의해 개발  Twitter(Bootstrap), Github, Youtube에서도 사용
+
+## 사고
+* 구조와 외형, 또 컨테이너와 내용을 분리하여 클래스 정의하고 이를 조합하여 스타일을 정의하는 방법
+* ID나 자식선택자에 의해 스타일을 정의하는 것이 아니라, 모든 스타일을 클래스로 정의하고 그것들을 조합
+
+
+## 구조와 외형의 분리 (Separate structure and skin)
+보편적인 구조와 반복 정의되는 외형은 따로 정의
+구조와 외형을 분리하여 적은 코드로 더 모양을 정의 할 수 있습니다.
+
+구조: width, height, border, padding, margin 등
+스킨: color, border-color, background-color 등
+
+```css
+/* 버튼 구조(structure): 공통적인 구조 지정 */
+.btn {
+    width: 200px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+/* 버튼 외형(skin) */
+.btn-blue {
+    background-color: blue;
+    color: white;
+}
+```
+
+기본 구조가 독립적으로 지정되어 있기 때문에 향후 다른 색의 버튼이 추가되더라도 외형 스타일을 정의하는 것만으로 끝나네요
+
+```html
+<a class="btn btn-blue">파란색 버튼</a>
+<a class="btn btn-red">빨간색 버튼</a>
+<a class="btn btn-gray">회색 버튼</a>
+```
+
+
+디자인에 의해 구조 및 스킨 나누는 방법이 변경 될 수 있다고 생각합니다. 
+
+둥근모양의 버튼이(border-radius) 공통적으로 사용되면 구조에 넣고 
+버튼에 따라 다르게 적용해야 하는 부분은 스킨에 넣는 등 사이트 구성을 파악하고 유연하게 생각할 필요가 있습니다.
+
+
+## 컨테이너와 내용의 분리 (Separate container and content)
+
+HTML 요소와 구조, 구성 요소가 존재하는 '장소'에 의존하지 않는 CSS를 실현하기 위한 생각입니다.
+CSS에 대응하는 HTML이 어떤 태그 이었다고해도 동일한 외형을 제공 할 수 있도록합니다.
+
+```css
+/* × 요소에 스타일을 지정 */
+h2 { font-size:120%; }
+
+/* ○ 클래스 이름을 부여하고 스타일을 지정 → 요소가 바뀌어도 CSS를 바꿀 필요가 없다 */
+.subtitle { font-size:120%; }
+
+/* × 장소를 한정하고 스타일을 지정 */
+.header .logo {
+  background-image:url(/img/logo.png);
+  width: 250px;
+  height: 25px;
+}
+.footer .logo {
+  background-image:url(/img/logo-small.png);
+  width: 100px;
+  height: 15px;
+}
+
+/* ○ 클래스 이름을 부여하고 스타일을 지정 → 장소를 한정하지 않기 때문에, 사이드 바, 주요 지역에서도 사용가능 */
+.logo-large {
+  background-image:url(/img/logo.png);
+  width: 250px;
+  height: 25px;
+}
+.logo-small {
+  background-image:url(/img/logo-small.png);
+  width: 100px;
+  height:15px;
+}
+```
+
+
 # BEM
+## 요약
+* Block, Element, Modifier의 약어.
+* HTML 구조를 명확하게 축을 둔 설계 도구 및 그 방법입니다. 
+* 엄격한 명명 규칙이 특징, 클래스 이름이 길어 지므로, 경원하는 사람도 많습니다.
+러시아 Yandex사에 의해 고안되었습니다.
+
+## 사고
+요소를 Block, Element, Modifier의 3 개로 나누어 명명 규칙을 바탕으로 Class 명을 기술합니다.
+
+## 명명 규칙
+"block__element-modifier"처럼 BEM은 "__" "_" "-"를 단어와 단어를 구분하는데 사용하고 
+이를 세퍼레이터라고 부르고 있습니다. 
+BEM은 Block, Element, Modifier 각각의 구분에 일관된 분리기를 사용하는 것이 중요합니다.
 
 
+
+## Block
+헤더 및 바닥 글·내비게이션 기사 검색 영역 등의 부품의 매수입니다. 
+Block은 어디에나 둘 수 있고, Block에 Block을 포함 할 수도 있지만, 
+CSS에서 Block을 중첩하여 스타일을 지정해서는 안됩니다. 
+왜냐하면 Block은 완전히 독립적 어느 위치로 이동해도 단독으로 동작 할 필요가 있기 때문입니다.
+
+Block과 Element의 구분은 "Block__Element"같이 밑줄 2 개로 연결합니다. 반드시 2 개 필요는 없지만, 
+class 이름을 보는 것만으로 BEM을이용하고 있다고 알기 쉬우므로 2개 붙이는 것을 권장합니다.
+
+```html
+<div class="wrapper">　/*Block*/
+　　<div class="header">　/*Block*/
+　　　　<div>logo</div>　/*Block*/
+　　</div>
+　　<div class="mainarea">　/*Block*/
+　　　　<section class="box">～</section>　/*Block*/
+　　　　<section class="box box-white">～</section>　/*Block*/
+　　　　<section class="box"><h2 class="box__title">～</p></section>　/*Block+Element*/
+　　</div>
+　　<div class="footer">～</div>　/*Block*/
+</div>
+```
+
+## Element
+
+Block 안의 하나 하나의 요소가 Element에 해당됩니다. 
+기사라면 제목(h2)·기사 본문(p)등의 부분이 다 Element로 구성됩니다.
+Modifier의 구분은 Element--Modifier 처럼 하이픈 2개로 연결합니다.
+
+```html
+<div class="search">　/*Block*/
+　<a href="#" class="link">　/*Element*/
+　<a href="#" class="link link--disabled">　/*Element+Modifier*/
+</div>
+```
+
+## Modifier
+
+같은 Block 또는 Element를, 색상, 크기를 바꾸는 등 다른 종류로 나눌 (파생) 때 사용합니다. 
+다시 Element를 만드는 것이 아니라 Modifier(확장자)을 사용하여 파생시킵니다. 
+
+이름 (key)와 값 (value)을 가지고 여러 Modifier를 동시에 사용할 수 있습니다. 
+
+Block (또는 Element)와 Modifier의 key와 value의 구분은 Block_key_value 또는 Element_key_value 처럼 구분 기호에 밑줄 하나를 사용합니다.
+
+예 : Block의 Modifier "Block_key_value"
+```html
+<ul class="list list_type_disc">
+  <li class="list__item"></li>
+  <li class="list__item"></li>
+</ul>
+  
+<ul class="list list_type_none">
+  <li class="list__item"></li>
+  <li class="list__item"></li>
+</ul>
+```
+
+예: Element의 Modifier "Element_key_value"
+```html
+<ul class="tubmenu">
+  <li class="tubmenu__item"></li>
+  <li class="tubmenu__item tubmenu__item_state_current"></li>
+    <!-- ↑状態がcurrentであるというclass -->
+  <li class="tubmenu__item"></li>
+</ul>
+```
+
+
+# SMACSS
+## 요약
+Scalable and Modular Architecture for CSS의 약자. "스맥스 '라고 읽습니다.
+OOCSS, BEM의 흐름을 수렴한 코딩 규칙. Jonathan Snook 씨에 의해 고안되었습니다.
+CSS를 보다 체계적, 더 구조화시킴으로써 제작, 유지보수를 보다 쉽게 하는 것을 목표로 합니다.
+
+## 사고
+다음과 같은 5개의 규칙으로 구성
+
+Base - 기본 규칙
+Layout - 레이아웃 규칙
+Module - 모듈 규칙
+State - 상태 규칙
+Theme - 테마 규칙
+
+
+## Base - 기반 규칙
+베이스는 사이트의 기본 스타일 설정에서 Reset.css과 Nomalize.css도 여기에 포함됩니다. 
+사이트 전체 글꼴 크기와 줄 간격, a 요소의 글자 색과 : hover 등 태그에 직접 설정하는 것은 기본 규칙으로 설명합니다.
+
+
+## Layout - 레이아웃 규칙
+헤더 및 바닥 글·내비게이션 메인 컨텐츠·사이드 바 등 큰 틀의 레이아웃 규칙을 지정하는 규칙입니다.
+
+명명 규칙
+등급 지정에 접두어(layout-, l-)을 부여, 또는 ID를 부여하도록 SMACSS에서는 권장하고 있습니다.
+※ID는 경우에 따라서는 CSS를 복잡하게 해버리므로 사용할 때는주의가 필요하지만 머리글과 바닥 글 등 범용 적으로 사용되는 ID도 있으므로, SMACSS는 ID 이용을 제한하지 않습니다.
+
+
+```css
+.l-main{
+  width: 80%;
+  float: left;
+}
+
+.l-fixed .l-main { /* px지정할 경우 body 태그 등에 l-fixed 클래스 부여 */
+  width: 640px;
+}
+```
+
+
+
+
+
+## Module - 모듈 규칙
+모듈은 버튼과 텍스트, 탭 등 모든 재사용 가능한 부분을 가리킵니다.
+클래스 이름은 모듈 이름-서브 클래스 이름의 순서로 씁니다.
+
+명명 규칙
+부모 모듈의 이름을 접두사로 부여합니다. 
+클래스 이름은 div와 span 등으로 부여되지만 li, a 등은 반드시 부여 할 필요는 없습니다. 
+제목은 h2 ← → h3 등의 변경이 일어나기 쉬우므로 클래스 이름으로 구분하는 것이 좋습니다.
+
+```html
+<div class="l-main">
+  <div class="box">
+    <h2 class="box-title">boxタイトル</h2>
+    <p class="box-description">説明</p>
+  </div>
+</div>
+```
+
+
+## State - 상태 규칙
+주로 javascript으로 조작되는 클래스를 지정합니다.
+특정 상태에 따라 .is-disable, .is-active, .is-current 등을 부여하여 스타일을 덮어 씁니다.
+예: 링크 입력 후, 비활성, 선택 시 등의 스타일
+
+```html
+<div class="l-main">
+  <div class="box is-disable">
+    <h2 class="box-title">boxタイトル</h2>
+    <p class="box-description">説明</p>
+  </div>
+</div>
+```
+```css
+.box.is-disable{
+  display: none; /* is-disabled가 부여된 box는 숨김 */
+}
+```
+
+
+## Theme - 테마 규칙
+테마는 전체 스타일을 변경할 경우 사용하지만, 기회는 적을지도 모릅니다. 
+메인 스타일의 뒤에 읽어 들이게 하고 스타일의 덮어쓰기를 하거나
+클래스를 추가하고 뒤에서 스타일을 변경시키기도 합니다.
+
+
+```css
+/* main.css */
+a {
+  color: #00f;
+}
+.box {
+  background-color: #fff;
+}
+```
+```css
+/* theme.css : main.css 뒤에서 읽도록 */
+a {
+  color: #f00;
+}
+.box {
+  background-color: #eee;
+}
+```
+
+# 정리
+이번에 소개 한 설계 방법 이외에도 다양 하지만, 유명하다고 생각되는 것을 정리해 보았습니다. 
+비교하면, OOCSS와 SMACSS는 멀티 클래스, BEM은 단일 클래스에 가까운 것인지라고 생각했습니다. 
+
+규칙이 복잡한 것도 있으므로 처음에 제대로 설계하는 것이 중요합니다.
+
+어떤 방법을 사용해도 좋다고 생각하고, 이를 바탕으로 기존 규칙을 만들어도 좋습니다. 
+중요한 것은 팀이 그것을 공통 인식 할 수 있도록하는 것입니다. 
+
+CSS뿐만 아니라 기술과 아이디어는 많이 있고, 점점 변해 갑니다. 
+저도 옛날 자신이 만든 코드를보고 기절하는 경우도 많이 있습니다. 
+과거의 자신을 부정하게되기도하지만, 두려워하지 말고 공부를 거듭해 가고 싶습니다.
+
+
+
+
+
+
+
+
+
+
+
+# BEM
 BEM은 블록（block）, 요소（element） 및 수정자（modifier）를 의미하며 Yandex 팀에서 제안한 프런트 엔드 명명 방법입니다. 
 이 똑똑한 명명 방법은 CSS 클래스를 다른 개발자에게 더 투명하고 의미있게 만듭니다. 
 BEM 명명 규칙은보다 엄격하며 시간이 많이 걸리는 대규모 프로젝트를 개발하는 데 필요한 정보를 더 많이 포함합니다.
