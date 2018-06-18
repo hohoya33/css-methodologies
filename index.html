@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<title>CSS 방법론</title>
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/league.css" id="theme">
+		<!-- <link rel="stylesheet" href="css/theme/ember.css" id="theme"> -->
+		<!-- Code syntax highlighting -->
+		<!-- <link rel="stylesheet" href="lib/css/monokai_sublime.css"> -->
+		<!-- <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/atom-one-dark.css"> -->
+		<!-- <link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/monokai-sublime.css"> -->
+		<!--<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/monokai.css">       -->
+		<link rel="stylesheet" href="https://highlightjs.org/static/demo/styles/monokai-sublime.css">">
+		<link rel="stylesheet" href="https://code.cdn.mozilla.net/fonts/fira.css">
+		<link rel='stylesheet' href='lib/font/devicons/devicons.css'>
+		<style type="text/css">
+		.reveal{font-size:24px}
+		.txl{text-align:left;display:inline-block}
+		.devicons-javascript{color:#f5de19}
+		.devicons-html5{color:#e44f26}
+		.devicons-css3{color:#1572b6}
+		.devicons-npm{color:#a23332}
+		.devicons-sass{color:#cd6799}
+
+		div.ex_preview{margin:40px}
+		div.ex_preview:hover{color:inherit;border:inherit}
+		div.ex_preview .blackborder{display:inline-block;border:3px solid #000;padding:10px 20px;color:#fff;border-radius:10px}
+
+		.bluebg{background-color:blue}
+		.redbg{background-color:red}
+		</style>
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+		<div class="reveal">
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<img src="img/css_logo.png" alt="css" width="160">
+					<h1 style="margin-bottom:60px;font-size:50px;letter-spacing:normal">CSS 방법론<br>(OOCSS, BEM, SMACSS)</h1>
+					<p>2018. 06. 20</p>
+					<p>IT 개발2팀 UI파트 - 김재호</p>
+				</section>
+
+				<section>
+					<h2>The Agenda</h2>
+					<ul>
+						<li>배경</li>
+						<li>OOCSS</li>
+						<li>BEM</li>
+						<li>SMACSS</li>
+					</ul>
+				</section>
+
+				<section>
+					<section>
+						<h2>배경</h2>
+					</section>
+
+					<section>
+						<h2>CSS 유지보수</h2>
+						<p>그 동안 무엇이 CSS의 유지보수를 어렵게 했는지 알아봅시다.</p>
+
+						<ul>
+							<li>CSS의 전역환경 - 페이지 전체에 정의하는 모든 스타일은 전역적으로 적용</li>
+							<li>유일한 클래스 이름들을 유지하거나 어떤 스타일이 어느 주어진 요소에든 적용되도록 특이성 규칙을 갖고 언쟁을 벌여야 하는 것이 일이 되어버립니다. </li>
+						</ul>
+<!--
+CSS설계는 매우 중요한 것입니다.
+
+일정한 규칙이 없으면
+각자가 다른 사고 방식에서 스타일 정의 하고 불필요한 CSS가 늘어나거나
+본인이 아니면 모르는 규칙이 발생해 유지보수 하기 어렵게 되어 버립니다.
+
+
+그래서 다음을 의식하고 CSS 설계를 실시하는 것이 중요합니다.
+
+직관적인 네이밍
+코드의 재사용
+쉬운 유지보수
+확장 가능
+
+
+
+## 일관적이지 않은 코드 구조
+* 작성 규칙이 통일되지 않았다
+* 동일 요소에 대한 중복 설정이 많아진다
+
+
+## 높은 결합도
+* 표현(css), 행위(js), 텍스트(html) 간에 명확한 분리가 이루어지지 않았다
+* 뷰의 일부 요소가 전체 요소 및 행위(js)에 영향을 미치고 있다
+* 스타일 적용 깊이 및 선택자 덮어쓰기도 html 구조를 바꾸기 어렵게 한다 -->
+
+
+					</section>
+
+					<section>
+						<p>CSS의 역할이 커지면서 CSS를 보다 효율적으로 작성하는 여러가지 아이디어들이 생겼다.
+이를 위해 대부분 CSS 선택자로 아이디와 타입(태그)을 사용하지 말 것을 권장한다.
+아이디는 재사용이 불가능한 요소이고, 태그에 스타일을 매기면 마크업이 수정될 경우 스타일도 다시 손봐야 하기 때문이다(의존적)</p>
+
+						<ul>
+							<li>쉬운 유지보수</li>
+							<li>코드의 재사용</li>
+							<li>확장 가능</li>
+							<li>직관적인 네이밍</li>
+						</ul>
+					</section>
+
+					<section>
+						<p>모듈성, 확장성, 유지보수성을 고려한 설계 방법</p>
+						<p>일관된 방법, 체계적인 방법, 이런게 정리되면 그게 바로 방법론이 된다.</p>
+						<p>
+이렇게 여러개 알아볼 필요 없이 하나만 선택해서 쓰면 되는 것 아니냐는 생각이 들 수 있다.
+하지만 각 방법론들은 서로에게 영감을 주는 관계이므로 하나씩 이해해볼 필요가 있다.
+그리고 마지막에 각 방법론에서 쓰이는 방법들이 서로 어떻게 연결되는지 생각해보려고 한다.</p>
+
+						<ul>
+							<li>OOCSS</li>
+							<li>SMACSS</li>
+							<li>BEM</li>
+						</ul>
+					</section>
+				</section>
+
+
+
+
+
+
+				<section>
+					<section>
+						<h2>OOCSS<br>(Object Oriented CSS)</h2>
+					</section>
+
+					<section>
+						<h2>OOCSS</h2>
+						<p>객체 지향에 따라 고안된 설계 방식</p>
+						<ul>
+							<li>구조와 외형의 분리 (Separate structure and skin)</li>
+							<li>컨테이너와 내용 분리 (Separate container and content)</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>구조와 외형의 분리</h2>
+						<p>기본적인 구조와 반복 정의되는 외형은 따로 정의 (공통 스타일 추상화)</p>
+						<ul>
+							<li>구조 (중복되는 스타일 요소) : width, height, border, padding, margin</li>
+							<li>외형 (특정 스타일 요소) : color, border-color, font-color, background-color</li>
+						</ul>
+						<!-- <p>결과적으로 이 원칙의 목적은 재사용과 유지보수</p> -->
+					</section>
+
+
+					<section>
+
+                        <div class="ex_preview">
+	              			<a href="#" class="blackborder bluebg">장바구니</a>
+							<a href="#" class="blackborder redbg">바로구매</a>
+						</div>
+
+						<pre><code class="html">
+	&lt;a href="#" class="blackborder bluebg"&gt;장바구니&lt;/a&gt;
+	&lt;a href="#" class="blackborder redbg"&gt;바로구매&lt;/a&gt;
+                        </code></pre>
+
+						<pre><code class="css">
+	.body_em .btn_wrap .redbg {
+		background-color: yellow;
+	}
+                        </code></pre>
+
+                        <ul>
+                        	<li>유연하게 사용가능</li>
+                        	<li>디자인 변경을 예측해서 명명하기</li>
+                        	<li>class 이름에 의미를 갖게 할 것 (시맨틱)</li>
+                        </ul>
+					</section>
+
+					<section>
+						<h2>시맨틱</h2>
+						<p>DRY (Don't Repeat Yourself) 원칙 위반</p>
+						<pre><code class="html">
+	&lt;a href="#" class="cartbtn"&gt;장바구니&lt;/a&gt;
+	&lt;a href="#" class="buybtn"&gt;바로구매&lt;/a&gt;
+                        </code></pre>
+						<pre class="vertical"><code class="css">
+	.cartbtn{
+		display:inline-block;
+		padding:10px 20px;
+		color:#fff;
+		border:3px solid #000;
+		border-radius:10px;
+		background-color:blue
+	}
+                        </code></pre>
+                        <pre class="vertical"><code class="css">
+	.buybtn{
+		display:inline-block;
+		padding:10px 20px;
+		color:#fff;
+		border:3px solid #000;
+		border-radius:10px;
+		background-color:red
+	}
+                        </code></pre>
+					</section>
+
+					<section>
+						<h2>OOCSS Style</h2>
+						<p>기본 구조가 독립적으로 지정되어 있기 때문에<br>향후 다른 색의 버튼이 추가되더라도 외형 스타일만 추가로 정의</p>
+						<pre><code class="html">
+	&lt;a href="#" class="btnbase cart"&gt;장바구니&lt;/a&gt;
+	&lt;a href="#" class="btnbase buy"&gt;바로구매&lt;/a&gt;
+                        </code></pre>
+
+						<pre class="vertical"><code class="css">
+	/* 버튼 구조: 공통적인 구조 지정 */
+	.btnbase{
+		display:inline-block;
+		padding:10px 20px;
+		color:#fff;
+		border:3px solid #000;
+		border-radius:10px;
+	}
+                        </code></pre>
+                        <pre class="vertical"><code class="css">
+	/* 버튼 외형 */
+	.cart{
+		background-color:blue
+	}
+
+	.buy{
+		background-color:red
+	}
+                        </code></pre>
+					</section>
+
+					<section>
+						<h2>컨테이너와 내용의 분리</h2>
+						<ul>
+							<li>장소에 의존하지 않는 스타일 정의</li>
+							<li>어떤 태그라도 동일한 외형 제공</li>
+							<li>어디에서나 사용할 수 있으며 코드의 재사용성이 높아진다.</li>
+						</ul>
+					</section>
+
+					<section>
+                        <pre><code class="css">
+	/* × 요소에 스타일을 지정 */
+	h2 { font-size:120%; }
+
+	/* ○ 클래스 이름을 부여하고 스타일을 지정 → 요소가 바뀌어도 CSS를 바꿀 필요가 없다 */
+	.subtitle { font-size:120%; }
+                        </code></pre>
+					</section>
+
+					<section>
+                        <pre class="vertical"><code class="css">
+	/* × 장소를 한정하고 스타일을 지정 */
+	.header .logo {
+		background-image:url(/img/logo.png);
+		width: 250px;
+		height: 25px;
+	}
+
+	.footer .logo {
+		background-image:url(/img/logo-small.png);
+		width: 100px;
+		height: 15px;
+	}
+                        </code></pre>
+                        <pre class="vertical"><code class="css">
+	/* ○ 클래스 이름을 부여하고 스타일을 지정 → 장소를 한정하지 않기 때문에, 사이드 바, 주요 지역에서도 사용가능 */
+	.logo-large {
+		background-image:url(/img/logo.png);
+		width: 250px;
+		height: 25px;
+	}
+
+	.logo-small {
+		background-image:url(/img/logo-small.png);
+		width: 100px;
+		height:15px;
+	}
+                        </code></pre>
+					</section>
+
+
+<!--
+
+장점
+코드의 재사용성이 높아진다.
+
+단점
+다중클래스를 사용하여 HTML이 복잡해진다.
+의미 있는 클래스 이름을 짓기 어렵다.
+
+
+여기까지 읽고 의문이 들 수 있다. 컨테이너(container)와 내용물(content)을 분리한다고 했는데, 적용 깊이가 깊으면 스타일이 쓰이는 뷰와 위치는 명확히 파악이 가능해서 좋지 않은가? 맞는 말이다.
+
+하지만 그 경우 특정 html에 특화되어 재사용성이 떨어지게 된다.
+즉, 중복 코드를 늘리게 되어 DRY 위반이다.
+사실 css 파일이 개념적으로 잘 분리되어 있다면 적용 깊이를 늘리지 않고도 각 스타일의 목적을 파악이 가능할 것이다.
+
+
+## 사용방법
+* class 늘리기
+* 상속된 선택자를 사용하지 마십시오.
+
+재사용을 추구하며
+클래스 이름은 상대적으로 추상적이며
+일반적으로 특정 내용을 반영하지 않습니다. -->
+
+
+                    <section>
+						<ul>
+							<li>코드 재사용성이 높아져 코드량이 줄고, 유지보수성도 높아지는 장점</li>
+							<li>반면, 마크업에 동일한 클래스를 여러 곳에 사용하므로 코드가 지저분해지는 단점</li>
+						</ul>
+					</section>
+
+
+				</section>
+
+
+				<section>
+					<section>
+						<h2>BEM<br>(Block Element Modifier)</h2>
+					</section>
+
+					<section>
+						<h2>BEM</h2>
+						<ul>
+							<li>사용자 인터페이스를 독립된 블록으로 나누는 아이디어를 중심으로 구성되는 방법론</li>
+							<li>Block, Element, Modifier로 나누어 명명 규칙을 바탕으로 클래스명을 기술</li>
+							<!-- <li>Block: 재사용 가능한 컴포넌트</li>
+							<li>Element: 블록 보다 작으며 블록의 부분이고 그것 자체로는 재사용 불가</li>
+							<li>Modifier: 블록이나 요소의 겉모습, 상태, 행위등을 정의하는 엔티티(entity, 개체)</li> -->
+							<li>엄격한 명명 규칙이 특징, 클래스 이름이 길어 지므로</li>
+							<li>클래스 이름이 상당히 지저분해 지고 시멘틱 클래스 이름 짓기의 전통적인 명명 규칙을 따르지 않는다는 것입니다.</li>
+						</ul>
+					</section>
+
+
+				</section>
+
+
+				<section>
+					<section>
+						<h2>SMACSS<br>(Scalable and Modular Architecture for CSS)</h2>
+					</section>
+				</section>
+
+
+				<section>
+					<h1>감사합니다.</h1>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+		<script>
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'convex', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+			Reveal.addEventListener( 'slidechanged', function(event) {
+				// event.previousSlide, event.currentSlide, event.indexh, event.indexv
+				var notes = event.currentSlide.querySelector(".notes");
+				if(notes) {
+					console.info(notes.innerHTML.replace(/\n\s+/g,'\n'));
+				}
+			});
+		</script>
+	</body>
+</html>
