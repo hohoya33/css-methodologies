@@ -55,7 +55,7 @@
 			<div class="slides">
 				<section>
 					<img src="img/css_logo.png" alt="css" width="160">
-					<h1 style="margin-bottom:60px;font-size:50px;letter-spacing:normal">CSS 방법론<br>(OOCSS, BEM, SMACSS)</h1>
+					<h1 style="margin-bottom:60px;font-size:50px;letter-spacing:normal">CSS 방법론<br><span style="font-size:30px">(OOCSS, BEM, SMACSS)</span></h1>
 					<p>2018. 06. 20</p>
 					<p>IT 개발2팀 UI파트 - 김재호</p>
 				</section>
@@ -63,7 +63,7 @@
 				<section>
 					<h2>The Agenda</h2>
 					<ul>
-						<li>배경</li>
+						<li>CSS 설계의 중요성</li>
 						<li>OOCSS</li>
 						<li>BEM</li>
 						<li>SMACSS</li>
@@ -72,31 +72,35 @@
 
 				<section>
 					<section>
-						<h2>배경</h2>
-					</section>
-
-					<section>
-						<h2>CSS 유지보수</h2>
-						<p>그 동안 무엇이 CSS의 유지보수를 어렵게 했는지 알아봅시다.</p>
-
+						<h2>CSS 설계의 중요성</h2>
 						<ul>
-							<li>CSS의 전역환경 - 페이지 전체에 정의하는 모든 스타일은 전역적으로 적용</li>
-							<li>유일한 클래스 이름들을 유지하거나 어떤 스타일이 어느 주어진 요소에든 적용되도록 특이성 규칙을 갖고 언쟁을 벌여야 하는 것이 일이 되어버립니다. </li>
+							<li>CSS의 전역환경</li>
+							<li>무조건 잘 나오면 장땡?!</li>
+							<li>일관적이지 않은 코드 구조</li>
+							<li>각자 다른 사고 방식 스타일 정의, 규칙이 통일되지 않음</li>
+							<li>동일 요소에 대한 중복 설정, 불필요한 CSS의 증가</li>
+							<li>높은 결합도 - 표현(css), 행위(js), 텍스트(html) 간 명확한 분리가 않됨</li>
+							<li>셀렉터 우선순위 - !important의 남발</li>
 						</ul>
+
 <!--
+
+<p>그 동안 무엇이 CSS의 유지보수를 어렵게 했는지 알아봅시다.</p>
+
+CSS를 사용함에 있어서 '잘 나오면 장땡'이라는 자세는 옳지 않다고 생각하고,
+ SASS를 사용하면 코드의 관리측면이나 효율성 측면에서 좋지만, 이 글에서는 그런 것들을 잠시 내려두고 약간 원론에 가까운 이야기를 하려고 한다.
+
+방법론은 방법론이다. 참고용 이지 바이블이 아니다.
+재사용가능하고 유지보수를 잘 할수 있는 목적이 중요하다.
+CSS preprocessor(Sass, Less 등) 는 선택이 아니라 필수다.
+분명한 점은 앞으로 CSS를 작성할때는 한번 더 생각할 것이고, 고민할 것이다. 나만의 방법론, 팀의 방법론을 만들어 가는것이 중요한것 같다.
+
+
 CSS설계는 매우 중요한 것입니다.
 
 일정한 규칙이 없으면
 각자가 다른 사고 방식에서 스타일 정의 하고 불필요한 CSS가 늘어나거나
 본인이 아니면 모르는 규칙이 발생해 유지보수 하기 어렵게 되어 버립니다.
-
-
-그래서 다음을 의식하고 CSS 설계를 실시하는 것이 중요합니다.
-
-직관적인 네이밍
-코드의 재사용
-쉬운 유지보수
-확장 가능
 
 
 
@@ -109,42 +113,86 @@ CSS설계는 매우 중요한 것입니다.
 * 표현(css), 행위(js), 텍스트(html) 간에 명확한 분리가 이루어지지 않았다
 * 뷰의 일부 요소가 전체 요소 및 행위(js)에 영향을 미치고 있다
 * 스타일 적용 깊이 및 선택자 덮어쓰기도 html 구조를 바꾸기 어렵게 한다 -->
-
-
 					</section>
 
 					<section>
-						<p>CSS의 역할이 커지면서 CSS를 보다 효율적으로 작성하는 여러가지 아이디어들이 생겼다.
-이를 위해 대부분 CSS 선택자로 아이디와 타입(태그)을 사용하지 말 것을 권장한다.
-아이디는 재사용이 불가능한 요소이고, 태그에 스타일을 매기면 마크업이 수정될 경우 스타일도 다시 손봐야 하기 때문이다(의존적)</p>
+						<p>유지 보수가 불가능한 코드 -> 귀차니즘, 중복, 시간 -> 새로운 기능의 개발 속도 저하</p>
+					</section>
 
+
+					<section>
+						<h2>CSS 작성 방법</h2>
+						<!-- <p>처음에는 CSS가 쉽다고 느껴질 수도 있습니다. 하지만 시간이 지날수록 CSS가 얼마나 복잡한 언어인지 알게됩니다.</p> -->
 						<ul>
-							<li>쉬운 유지보수</li>
-							<li>코드의 재사용</li>
-							<li>확장 가능</li>
-							<li>직관적인 네이밍</li>
+							<li>적절한 의미 사용 (시맨틱)</li>
+							<li>모듈화</li>
+							<li>명명 규칙</li>
+							<!-- <li>단일 책임 원칙</li> -->
 						</ul>
 					</section>
 
 					<section>
-						<p>모듈성, 확장성, 유지보수성을 고려한 설계 방법</p>
-						<p>일관된 방법, 체계적인 방법, 이런게 정리되면 그게 바로 방법론이 된다.</p>
+						<h2>적절한 의미 사용 (시맨틱)</h2>
+						<p>HTML에서 시맨틱은 적절한 마크업 태그 사용</p>
+						<pre><code class="html">
+	&lt;!-- Bad --&gt;
+	&lt;div class="footer"&gt; ... &lt;/div&gt;
+
+	&lt;!-- Good --&gt;
+	&lt;footer"&gt; ... &lt;/footer&gt;
+                        </code></pre>
+					</section>
+
+					<section>
+						<h2>의미론적 CSS</h2>
+						<ul>
+							<li>컨텐츠의 성격과 기능을 전달하는 클래스명</li>
+							<!-- <li>구조적 의미와 기능을 전달하는 클래스명</li> -->
+							<li>이해하기 쉬운 클래스명, 너무 구체적인 것은 안됨</li>
+							<li>시맨틱 CSS는 훨씬 더 추상적이고 주관적</li>
+						</ul>
+
+<!-- HTML과 CSS를 책처럼 읽을 수 있어야합니다.
+마치 등장인물과 그 관계를 말해주는 이야기처럼 말입니다.
+결국 더 많은 시맨틱 CSS는 코드를 잘 유지할 수 있도록 만들어줍니다.
+단일 책임 원칙
+느슨하게, 단일 책임 원리는 모든 모듈 또는 코드 덩어리 (함수 등)는 하나의 작업을 잘하고 하나의 작업 만 수행해야한다고 말합니다.
+이것의 이점은 주로 유지 보수성과 확장성에 있습니다. -->
+					</section>
+
+
+
+					<section>
+						<h2>모듈화</h2>
+						<ul>
+							<li>디자인을 구성 요소(component)로 분해</li>
+							<li>코드가 분리 될수록 클래스 간의 상호 의존성이 낮음</li>
+							<!-- <li>ID 선택자는 불필요한 특수성을 초래. 재사용 불가능</li> -->
+							<!-- <li>대부분 CSS 선택자로 ID와 태그를 사용하지 말 것을 권장</li> -->
+						</ul>
+					</section>
+
+
+					<section>
+						<h2>명명 규칙</h2>
+						<p>쉬운 유지보수, 코드의 재사용, 확장 가능, 직관적인 네이밍을 고려한 설계 방법</p>
+
+						<ul>
+							<li>OOCSS (Object Oriented CSS)</li>
+							<li>BEM (Block Element Modifier)</li>
+							<li>SMACSS (Scalable and Modular Architecture for CSS)</li>
+						</ul>
+
+						<!--
+						<p>일관된 방법, 체계적인 방법, 이런게 정리되면 그게 바로 방법론</p>
 						<p>
-이렇게 여러개 알아볼 필요 없이 하나만 선택해서 쓰면 되는 것 아니냐는 생각이 들 수 있다.
-하지만 각 방법론들은 서로에게 영감을 주는 관계이므로 하나씩 이해해볼 필요가 있다.
-그리고 마지막에 각 방법론에서 쓰이는 방법들이 서로 어떻게 연결되는지 생각해보려고 한다.</p>
-
-						<ul>
-							<li>OOCSS</li>
-							<li>SMACSS</li>
-							<li>BEM</li>
-						</ul>
+						이렇게 여러개 알아볼 필요 없이 하나만 선택해서 쓰면 되는 것 아니냐는 생각이 들 수 있다.
+						하지만 각 방법론들은 서로에게 영감을 주는 관계이므로 하나씩 이해해볼 필요가 있다.
+						그리고 마지막에 각 방법론에서 쓰이는 방법들이 서로 어떻게 연결되는지 생각해보려고 한다.
+						</p> -->
 					</section>
+
 				</section>
-
-
-
-
 
 
 				<section>
@@ -153,20 +201,27 @@ CSS설계는 매우 중요한 것입니다.
 					</section>
 
 					<section>
-						<h2>OOCSS</h2>
-						<p>객체 지향에 따라 고안된 설계 방식</p>
+						<h2>OOCSS의 원칙</h2>
+						<p>객체 지향에 따라 고안된 설계 방식<br>코드 재사용성을 높이고, 더 빠르고 효율적이며 추가하기 쉽고 유지보수 용이</p>
+
 						<ul>
 							<li>구조와 외형의 분리 (Separate structure and skin)</li>
 							<li>컨테이너와 내용 분리 (Separate container and content)</li>
+							<!-- <li>코드 재사용성이 높아져 코드량이 줄고, 유지보수성도 높아지는 장점</li> -->
+							<!-- <li>반면, 마크업에 동일한 클래스를 여러 곳에 사용하므로 코드가 지저분해지는 단점</li> -->
+							<!-- <li>코드 재사용성을 높이고, 더 빠르고 효율적이며 뭔가 추가하기 쉽고 유지보수하기 용이한 스타일시트
+							OOCSS의 목표는 다양한 스타일 규칙 전체에서 동일한 속성의 중복을 줄이는 것 자손선택자의 사용을 지양</li> -->
+
 						</ul>
 					</section>
+
 
 					<section>
 						<h2>구조와 외형의 분리</h2>
 						<p>기본적인 구조와 반복 정의되는 외형은 따로 정의 (공통 스타일 추상화)</p>
 						<ul>
-							<li>구조 (중복되는 스타일 요소) : width, height, border, padding, margin</li>
-							<li>외형 (특정 스타일 요소) : color, border-color, font-color, background-color</li>
+							<li>구조 : width, height, border, padding, margin</li>
+							<li>외형 : color, border-color, font-color, background-color</li>
 						</ul>
 						<!-- <p>결과적으로 이 원칙의 목적은 재사용과 유지보수</p> -->
 					</section>
@@ -192,14 +247,15 @@ CSS설계는 매우 중요한 것입니다.
 
                         <ul>
                         	<li>유연하게 사용가능</li>
-                        	<li>디자인 변경을 예측해서 명명하기</li>
-                        	<li>class 이름에 의미를 갖게 할 것 (시맨틱)</li>
+                        	<!-- <li>디자인 변경을 예측해서 명명하기</li> -->
+                        	<li>재사용성을 확보하는 이름</li>
+                        	<li>클래스명에 의미를 갖게 할 것 (시맨틱)</li>
                         </ul>
 					</section>
 
 					<section>
-						<h2>시맨틱</h2>
-						<p>DRY (Don't Repeat Yourself) 원칙 위반</p>
+						<h2>시맨틱 CSS</h2>
+						<p>DRY (Don't Repeat Yourself) CSS</p>
 						<pre><code class="html">
 	&lt;a href="#" class="cartbtn"&gt;장바구니&lt;/a&gt;
 	&lt;a href="#" class="buybtn"&gt;바로구매&lt;/a&gt;
@@ -229,6 +285,12 @@ CSS설계는 매우 중요한 것입니다.
 					<section>
 						<h2>OOCSS Style</h2>
 						<p>기본 구조가 독립적으로 지정되어 있기 때문에<br>향후 다른 색의 버튼이 추가되더라도 외형 스타일만 추가로 정의</p>
+						<!--
+						계획을 세우고 미리 생각해 보면 일반적인 스타일을 추상화하여 CSS
+						이제 모든 요소가 클래스를 사용하고 공통 스타일이 재사용 가능한 "스킨"으로 결합되며 불필요하게 반복되는 요소는 없습니다.
+						우리는 모든 요소에 "스킨"클래스를 적용하기 만하면 코드와 적은 재사용 가능성을 제외하고 첫 번째 예제가 생성하는 것과 동일한 결과가됩니다 .
+						-->
+
 						<pre><code class="html">
 	&lt;a href="#" class="btnbase cart"&gt;장바구니&lt;/a&gt;
 	&lt;a href="#" class="btnbase buy"&gt;바로구매&lt;/a&gt;
@@ -259,87 +321,73 @@ CSS설계는 매우 중요한 것입니다.
 					<section>
 						<h2>컨테이너와 내용의 분리</h2>
 						<ul>
+							<!-- <li>위치 의존 스타일을 사용하는 경우</li> -->
 							<li>장소에 의존하지 않는 스타일 정의</li>
 							<li>어떤 태그라도 동일한 외형 제공</li>
-							<li>어디에서나 사용할 수 있으며 코드의 재사용성이 높아진다.</li>
+							<li>어디에서나 사용할 수 있으며 코드의 재사용성을 높인다</li>
 						</ul>
 					</section>
 
 					<section>
-                        <pre><code class="css">
-	/* × 요소에 스타일을 지정 */
-	h2 { font-size:120%; }
+						<p>요소에 스타일 지정 → 이름을 부여하고 스타일을 지정<br>요소가 바뀌어도 CSS를 바꿀 필요가 없다</p>
+						<pre class="vertical"><code class="html">
+	&lt;h2&gt; ... &lt;/h2&gt;
+                        </code></pre>
 
-	/* ○ 클래스 이름을 부여하고 스타일을 지정 → 요소가 바뀌어도 CSS를 바꿀 필요가 없다 */
-	.subtitle { font-size:120%; }
+						<pre class="vertical"><code class="css">
+	h2 { font-size:16px }
+                        </code></pre>
+
+                        <pre class="vertical"><code class="html">
+	&lt;h3 class="subtitle"&gt; ... &lt;/h3&gt;
+	&lt;span class="subtitle"&gt; ... &lt;/span&gt;
+                        </code></pre>
+
+                        <pre class="vertical"><code class="css">
+	.subtitle { font-size:16px }
+
                         </code></pre>
 					</section>
 
+
 					<section>
+						<p>장소를 한정하고 스타일 지정 → 클래스 이름을 부여하고 스타일 지정<br>장소를 한정하지 않기 때문에, 사이드 바, 주요 지역에서도 사용가능</p>
+						<!-- <p>구조적 상황에 관계없이 문서의 어느 곳에서나 다시 사용</p> -->
+
+<!-- 이제 우리는 불필요하게 스타일을 복제 하고 그것을 인식하지 못할 수도 있습니다.
+OOCSS를 사용하면 다른 요소들 사이에 공통적 인 점에 대해 미리 생각해 두었다가 공통적 인 기능을 모듈이나 객체로 분리하여 어디서든 재사용 할 수 있습니다.
+위 예제의 하위 선택기를 사용하여 선언 된 스타일 은 특정 컨테이너 (이 경우에는 세로 막대 또는 바닥 글)에 종속되므로 재사용 할 수 없습니다 .
+OOCSS의 클래스 기반 모듈 건물을 사용할 때 우리는 스타일이 포함 된 요소에 의존하지 않도록합니다.  -->
+
+
+
                         <pre class="vertical"><code class="css">
-	/* × 장소를 한정하고 스타일을 지정 */
 	.header .logo {
-		background-image:url(/img/logo.png);
+		background-image:url(img/logo.png);
 		width: 250px;
 		height: 25px;
 	}
 
 	.footer .logo {
-		background-image:url(/img/logo-small.png);
+		background-image:url(img/logo-small.png);
 		width: 100px;
 		height: 15px;
 	}
                         </code></pre>
                         <pre class="vertical"><code class="css">
-	/* ○ 클래스 이름을 부여하고 스타일을 지정 → 장소를 한정하지 않기 때문에, 사이드 바, 주요 지역에서도 사용가능 */
 	.logo-large {
-		background-image:url(/img/logo.png);
+		background-image:url(img/logo.png);
 		width: 250px;
 		height: 25px;
 	}
 
 	.logo-small {
-		background-image:url(/img/logo-small.png);
+		background-image:url(img/logo-small.png);
 		width: 100px;
 		height:15px;
 	}
                         </code></pre>
 					</section>
-
-
-<!--
-
-장점
-코드의 재사용성이 높아진다.
-
-단점
-다중클래스를 사용하여 HTML이 복잡해진다.
-의미 있는 클래스 이름을 짓기 어렵다.
-
-
-여기까지 읽고 의문이 들 수 있다. 컨테이너(container)와 내용물(content)을 분리한다고 했는데, 적용 깊이가 깊으면 스타일이 쓰이는 뷰와 위치는 명확히 파악이 가능해서 좋지 않은가? 맞는 말이다.
-
-하지만 그 경우 특정 html에 특화되어 재사용성이 떨어지게 된다.
-즉, 중복 코드를 늘리게 되어 DRY 위반이다.
-사실 css 파일이 개념적으로 잘 분리되어 있다면 적용 깊이를 늘리지 않고도 각 스타일의 목적을 파악이 가능할 것이다.
-
-
-## 사용방법
-* class 늘리기
-* 상속된 선택자를 사용하지 마십시오.
-
-재사용을 추구하며
-클래스 이름은 상대적으로 추상적이며
-일반적으로 특정 내용을 반영하지 않습니다. -->
-
-
-                    <section>
-						<ul>
-							<li>코드 재사용성이 높아져 코드량이 줄고, 유지보수성도 높아지는 장점</li>
-							<li>반면, 마크업에 동일한 클래스를 여러 곳에 사용하므로 코드가 지저분해지는 단점</li>
-						</ul>
-					</section>
-
 
 				</section>
 
@@ -351,17 +399,257 @@ CSS설계는 매우 중요한 것입니다.
 
 					<section>
 						<h2>BEM</h2>
+						<p>CSS 클래스를 구조화, 이름을 지정, 코드의 유연성과 유지 관리 가능성을 높이는 방법</p>
 						<ul>
-							<li>사용자 인터페이스를 독립된 블록으로 나누는 아이디어를 중심으로 구성되는 방법론</li>
-							<li>Block, Element, Modifier로 나누어 명명 규칙을 바탕으로 클래스명을 기술</li>
-							<!-- <li>Block: 재사용 가능한 컴포넌트</li>
-							<li>Element: 블록 보다 작으며 블록의 부분이고 그것 자체로는 재사용 불가</li>
-							<li>Modifier: 블록이나 요소의 겉모습, 상태, 행위등을 정의하는 엔티티(entity, 개체)</li> -->
-							<li>엄격한 명명 규칙이 특징, 클래스 이름이 길어 지므로</li>
-							<li>클래스 이름이 상당히 지저분해 지고 시멘틱 클래스 이름 짓기의 전통적인 명명 규칙을 따르지 않는다는 것입니다.</li>
+							<li>Block, Element, Modifier로 나누어 클래스명 기술</li>
+							<li>엄격한 명명 규칙이 특징 (class만 사용. ID, 태그 사용 금지)</li>
+							<li>클래스명이 용도, 형태를 의미하므로 직관적인 것이 장점, 길고 복잡해지는 것이 단점</li>
+						</ul>
+
+
+							<!--
+							<li>selector는 무엇을 하는지는 이름만 보고 알 수 있습니다.</li>
+							<li>selector를 보기만 해도 어디에 사용할 수 있는지 알 수 있습니다.</li>
+							<li>클래스 이름 간의 관계를 알기 위해서는 클래스 이름을 살펴 보기만 해도 된다.</li> -->
+
+						<!-- <p>
+						서로 다른 역할을 수행하는 CSS 클래스를 차별화
+						각각의 요소들이 무슨 역할을 하는지 구분해둔 것만 보고도 이해
+						마크업에서는 명확한 역할을 구분
+						OOCSS와 함께 자손선택자를 지양
+
+						OOCSS을 보완하는 역할
+						BEM은 하나의 클래스로 자손역할을 하는 부분까지 표현하는 것이 특징
+						명명규칙에 익숙하지 않은 개발자들에게는 다소 어려운 부분으로 다가와서 생산력 저하
+						너무 길어질 우려가 있음
+
+						클래스 이름이 상당히 지저분해 지고
+
+						</p>
+
+						#OOCSS와 BEM
+
+						CSS와 HTML 사이의 명확하고, 엄격한 관계를 형성하는 데에 도움
+						재사용 가능하고, 작성 가능한 컴포넌트를 만드는 데에 도움
+
+						보다 적은 중첩과 낮은 특수성
+						확장성 있는 스타일시트를 작성
+
+						OOCSS는 당신의 스타일시트를 "객체"의 모음
+
+						(한 웹사이트에서 독립적으로 사용되는, 재사용 가능하고 반복 가능한 단편들)
+						으로 생각하게 만드는 CSS 작성 방식입니다. -->
+					</section>
+
+
+					<section>
+						<h2>Block</h2>
+						<ul>
+							<li>재사용 가능한 컴포넌트 (코드의 구조적 덩어리)</li>
+							<li>클래스명은 하나의 단어 사용, 길어질 경우 단일 하이픈(-)으로 구분</li>
+							<li>ex) logo / login form / navigation / header / footer</li>
 						</ul>
 					</section>
 
+					<section>
+						<div><img src="img/stick_man_b.png" alt="" style="width:50%;margin:0"></div>
+
+                        <pre><code class="html">
+	&lt;div class="stick-man"&gt; ... &lt;/div&gt;
+                        </code></pre>
+
+                        <pre><code class="css">
+	.stick-man { ... }
+                        </code></pre>
+					</section>
+
+
+					<section>
+						<h2>Element</h2>
+						<ul>
+							<!-- <li>블록에 의존하는 하위 구성 요소</li> -->
+							<!-- <li>특정 기능을 수행하는 블록 내의 하위 구성 요소</li> -->
+							<!-- <li>블록 안에만 존재 하는 하위 요소</li> -->
+							<li>요소는 블록 외부에서 사용할 수 없는 블록의 구성 요소</li>
+							<!-- <li>독립적 의미가 없고 블록에 의미적으로 연결</li> -->
+							<li>클래스명은 해당 블록 이름과 밑줄 두 개(__) 추가 후 작성</li>
+							<li>클래스 간 서로 의존성이 없어야 함</li>
+						</ul>
+					</section>
+
+
+					<section>
+						<div><img src="img/stick_man_e.png" alt="" style="width:50%;margin:0"></div>
+                        <pre><code class="html">
+	&lt;div class="stick-man"&gt;
+		&lt;div class="stick-man__head"&gt;&lt;/div&gt;
+		&lt;div class="stick-man__arms"&gt;&lt;/div&gt;
+		&lt;div class="stick-man__feet"&gt;&lt;/div&gt;
+	&lt;/div&gt;
+                        </code></pre>
+                        <pre class="vertical"><code class="css">
+	.stick-man__head { ... }
+	.stick-man__arms { ... }
+	.stick-man__feet { ... }
+                        </code></pre>
+                        <pre class="vertical"><code class="css">
+	/* Bad: 의존성 X */
+	.stick-man .stick-man__head { ... }
+	div.stick-man__head { ... }
+                        </code></pre>
+					</section>
+
+					<section>
+						<h2>요소의 요소를 만들 필요가 있다면..</h2>
+						<p>깊이 최소화 (block__element__element)<br>DOM 트리를 모방 하려고 하지 마세요</p>
+                        <pre><code class="html">
+	&lt;!-- Bad --&gt;
+	&lt;div class="stick-man"&gt;
+		...
+		&lt;div class="stick-man__arms"&gt;
+			&lt;span class="stick-man__arms__left"&gt;&lt;/span&gt;
+			&lt;span class="stick-man__arms__right"&gt;&lt;/span&gt;
+		&lt;/div&gt;
+		...
+	&lt;/div&gt;
+                        </code></pre>
+					</section>
+
+					<section>
+						<h2>새로운 블록 만들기</h2>
+                        <pre><code class="html">
+	&lt;!-- Good --&gt;
+	&lt;div class="stick-man"&gt;
+		...
+		&lt;div class="arms"&gt;
+			&lt;span class="arms__left"&gt;&lt;/span&gt;
+			&lt;span class="arms__right"&gt;&lt;/span&gt;
+		&lt;/span&gt;
+		...
+	&lt;/div&gt;
+                        </code></pre>
+					</section>
+
+					<section>
+                        <pre><code class="html">
+	&lt;!-- Bad --&gt;
+	&lt;div class="stick-man"&gt;
+		...
+		&lt;div class="stick-man-arms"&gt;
+			&lt;span class="stick-man-arms__left"&gt;&lt;/span&gt;
+			&lt;span class="stick-man-arms__right"&gt;&lt;/span&gt;
+		&lt;/div&gt;
+		...
+	&lt;/div&gt;
+
+	&lt;!-- 블록 이동을 시도 할 때, 이상한 이름으로 문제 발생 --&gt;
+	&lt;div class="iron-man"&gt;
+		...
+		&lt;div class="stick-man-arms"&gt;
+			&lt;span class="stick-man-arms__left"&gt;&lt;/span&gt;
+			&lt;span class="stick-man-arms__right"&gt;&lt;/span&gt;
+		&lt;/div&gt;
+		...
+	&lt;/div&gt;
+                        </code></pre>
+					</section>
+
+					<section>
+						<h2>하나의 중첩된 요소로 BEM-트리 만들기</h2>
+                        <pre><code class="html">
+	&lt;!-- Good --&gt;
+	&lt;div class="stick-man"&gt;
+		...
+		&lt;div class="stick-man__arms"&gt;
+			&lt;span class="stick-man__left"&gt;&lt;/span&gt;
+			&lt;span class="stick-man__right"&gt;&lt;/span&gt;
+		&lt;/div&gt;
+		...
+	&lt;/div&gt;
+                        </code></pre>
+					</section>
+
+					<section>
+						<h2>DOM 트리</h2>
+                        <pre><code class="html">
+	&lt;ul&gt;
+		&lt;li&gt;
+			&lt;a&gt;
+				&lt;span&gt;&lt;/span&gt;
+			&lt;/a&gt;
+		&lt;/li&gt;
+	&lt;/ul&gt;
+                        </code></pre>
+                       	<pre><code class="css">
+	.ul {}
+	.ul > li {}
+	.ul > li > a {}
+	.ul > li > a > span {}
+                        </code></pre>
+					</section>
+
+					<section>
+						<h2>BEM 트리</h2>
+                        <pre><code class="html">
+	&lt;ul class="menu"&gt;
+		&lt;li class="menu__item"&gt;
+			&lt;a class="menu__link"&gt;
+				&lt;span class="menu__text"&gt;&lt;/span&gt;
+			&lt;/a&gt;
+		&lt;/li&gt;
+	&lt;/ul&gt;
+                        </code></pre>
+                       	<pre><code class="css">
+	.menu {}
+	.menu__item {}
+	.menu__link {}
+	.menu__text {}
+                        </code></pre>
+					</section>
+
+
+					<section>
+						<h2>Modifier</h2>
+						<ul>
+							<li>블록, 요소에 대해 추가 변형을 제공 (외형, 상태)</li>
+							<li>클래스명은 블록 또는 요소 이름 옆에 하이픈 두 개(--) 추가 후 작성</li>
+						</ul>
+					</section>
+
+
+					<section>
+
+						<div><img src="img/stick_man_m.png" alt="" style="width:50%;margin:0"></div>
+
+						<pre><code class="html">
+	&lt;div class="stick-man stick-man--blue"&gt; ... &lt;/div&gt;
+	&lt;div class="stick-man stick-man--red"&gt; ... &lt;/div&gt;
+                        </code></pre>
+
+                        <pre><code class="css">
+	/* Block modifier */
+	.stick-man--blue { ... }
+	.stick-man--red { ... }
+                        </code></pre>
+					</section>
+
+					<section>
+						<div><img src="img/stick_man_m2.png" alt="" style="width:50%;margin:0"></div>
+
+						<pre><code class="html">
+	&lt;div class="stick-man"&gt;
+		&lt;div class="stick-man__head stick-man__head--small"&gt;&lt;/div&gt;
+		또는..
+		&lt;div class="stick-man__head stick-man__head--big"&gt;&lt;/div&gt;
+	&lt;/div&gt;
+                        </code></pre>
+
+                        <pre><code class="css">
+	/* Element modifier */
+	.stick-man__head--small { ... }
+	.stick-man__head--big { ... }
+                        </code></pre>
+					</section>
 
 				</section>
 
@@ -370,7 +658,234 @@ CSS설계는 매우 중요한 것입니다.
 					<section>
 						<h2>SMACSS<br>(Scalable and Modular Architecture for CSS)</h2>
 					</section>
+
+					<section>
+						<h2>SMACSS</h2>
+						<p>CSS를 보다 체계적, 더 구조화시킴으로써 제작, 유지보수를 보다 쉽게 하는 것을 목표</p>
+						<ul>
+							<li>OOCSS, BEM의 흐름을 수렴한 코딩 규칙</li>
+							<li>SMACSS와 같은 후속의 접근법들이 이 핵심 컨셉을 차용하고 좀 더 자세한 사항을 추가</li>
+							<!-- <li>어떤 CSS 규칙이 어떤 카테고리에 속하는지 결정하는데에 숙고를 요구</li> -->
+							<!-- <li>BEM과 같은 접근법은 이 결정법중 몇가지를 차용 더 쉽게 적용이 가능 하도록</li> -->
+						</ul>
+<!--
+내가 생각하는 SMACSS의 주요내용 이렇다.
+
+하나의 사이트에서 공통으로 적용되는 Base가 되는 css의 집합을 만든다.
+예) reset.css
+
+css 이름은 콘텐츠와 직접적으로 연관되고, 이름만으로 어떤 콘텐츠인지 알 수 있도록 해야 한다.
+
+– 접두사를 사용하여 레이아웃, 모듈, 상태 여부를 알 수 있도록 : layout-, module-, is-
+– layout-fixed, module-pop, module-login 등
+
+마크업시 재사용이 가능하도록 Id보다는 class로 설정한다.
+
+기능단위로 묶어서 css를 작성한다.
+– 특히 반응형 웹 적용시 mediaquery 해상도에 따라 파일을 나누거나 하는 경우가 많은데, 이는 유지보수 및 공동작업 시 혼란(?) 혹은 번거로움을 야기한다.
+
+따라서 기능단위로 그룹화하여 mediaquery 까지 묶어서 작성한다.
+– class가 추가되는 경우에는 해당 그룹에 추가하면 된다.
+
+Theme 관련해서는 color등 변경되는 class만 모아서 파일로 관리하면 Theme 생성, 업데이트가 용이할 것임.
+– 기본 Theme에 나중에 작성한 css파일이 덮어쓰기 되는 형식
+ -->
+
+					</section>
+
+					<section>
+						<h2>SMACSS의 핵심은 범주화</h2>
+						<p>다음과 같은 5개의 구분된 카테고리로 CSS를 작성</p>
+						<ul>
+							<li>Base - 기본 규칙</li>
+							<li>Layout - 레이아웃 규칙</li>
+							<li>Module - 모듈 규칙</li>
+							<li>State - 상태 규칙</li>
+							<li>Theme - 테마 규칙</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>Base - 기본 규칙</h2>
+						<p>요소 선택자에 적용하는 기본 스타일 (reset.css, nomalize.css)</p>
+						<!-- <ul>
+							<li>사이트 전체 글꼴 크기와 줄 간격, a 요소의 글자 색과 : hover 등 태그에 직접 설정하는 것은 기본 규칙으로 설명</li>
+						</ul> -->
+
+						<pre><code class="css">
+	body,p,h1,h2,h3,h4,h5,h6,ul,ol,li,dl,dt,dd,table,th,td,form,fieldset,legend,input,
+	textarea,button,select{margin:0;padding:0}
+	body,input,textarea,select,button,table{font-size:14px;line-height:1.25}
+	...
+                        </code></pre>
+					</section>
+
+					<section>
+						<h2>Layout - 레이아웃 규칙</h2>
+						<p>큰 틀의 레이아웃 규칙을 지정하는 규칙</p>
+						<ul>
+							<!-- <li>등급 지정에 접두어(layout-, l-)을 부여, 또는 ID를 부여하도록 권장</li> -->
+							<li>레이아웃 규칙에 대해, 클래스명은 접두사(prefix)로 l-, layout- 등의 명시 요구</li>
+							<li>ID는 경우 머리글과 바닥 글 등 범용 적으로 사용되는 ID도 있으므로, SMACSS는 ID 이용을 제한하지 않음</li>
+							<!-- <li>레이아웃 규칙에 대해, 반드시 클래스 이름 앞에 꼭 l- 접두어를 붙이거나 layout- 접두어를 붙이라고 말합니다.</li> -->
+							<!--
+							<li>주요(major) 컴포넌트: 머리말header, 꼬리말footer, 내용content 헤더 및 바닥 글·내비게이션 메인 컨텐츠·사이드 바 등 </li>
+							<li>부수(minor) 컴포넌트: 주요 컴포넌트 내에 있는 컴포넌트 (내비게이션 바, 아이템 목록, 폼(회원가입, 로그인, …))</li>
+							 -->
+						</ul>
+
+						<pre><code class="css">
+	#content {width:80%;float:left}
+	#aside {width:20%}
+
+	.l-fixed #content {
+		width: 600px;
+		margin-right: 10px;
+	}
+	.l-fixed #aside {
+		width: 200px
+	}
+                        </code></pre>
+
+					</section>
+
+					<section>
+						<h2>Module - 모듈 규칙</h2>
+						<p>재사용을 위한 요소</p>
+						<ul>
+							<li>버튼, 탭 등 모든 재사용 가능한 부분</li>
+							<li>부모 모듈의 이름을 접두사로 부여</li>
+							<!-- <li>제목은 h2 ← → h3 등의 변경이 일어나기 쉬우므로 클래스 이름으로 구분</li> -->
+							<li>재사용을 위해 CSS 선택자로 ID와 태그를 사용하지 않는다.</li>
+							<li>만약, 태그 셀렉터를 사용해야 한다면, .box > span 처럼 child 셀렉터 사용</li>
+						</ul>
+
+						<pre><code class="html">
+	&lt;div class="box"&gt;
+		&lt;h2 class="box-title"&gt; ... &lt;/h2&gt;
+		&lt;p class="box-description"&gt; ... &lt;/p&gt;
+	&lt;/div&gt;
+                        </code></pre>
+
+					</section>
+
+					<section>
+						<h2>State - 상태 규칙</h2>
+						<p>요소의 상태 변화를 표현하는 스타일</p>
+						<ul>
+							<li>주로 javascript으로 조작되는 클래스를 지정</li>
+							<!-- <li>상태 규칙에 대해서는 상태를 기술하는 접두어를 클래스 이름이 붙이라고 말합니다. is-hidden이나 is-collapsed와 같이 말입니다.</li> -->
+							<!-- <li>특정 상태에 따라 .is-disable, .is-active, .is-current 등을 부여</li> -->
+							<li>hidden, expend, active, hover 등의 상태에서 사용</li>
+							<li>접두사(prefix)로 is- 등을 명시 is-hidden, is-collapsed</li>
+							<!-- <li>자바스크립트 의존성을 가짐 동적인 변화가 가능</li>
+							<li>반면 모듈은 렌더링 시점에 적용되어 정적임</li> -->
+						</ul>
+
+						<pre><code class="html">
+	&lt;div class="box is-disable"&gt;
+		&lt;h2 class="box-title"&gt; ... &lt;/h2&gt;
+		&lt;p class="box-description"&gt; ... &lt;/p&gt;
+	&lt;/div&gt;
+                        </code></pre>
+
+                        <pre><code class="css">
+	.box.is-disable{
+		display: none;
+	}
+                        </code></pre>
+
+					</section>
+
+					<section>
+						<h2>Theme - 테마 규칙</h2>
+						<p>서비스 전체적인 표현을 결정 (배경, 색, 글꼴, Border)</p>
+						<ul>
+							<li>테마는 전체 스타일을 변경할 경우 사용</li>
+							<li>메인 스타일의 뒤에 읽어 들이게 하고 스타일의 덮어쓰기를 하거나 클래스를 추가하고 뒤에서 스타일을 변경</li>
+							<!-- <li>색상이나 이미지를 불변하는 스타일과 분리</li>
+							<li>기존 스타일을 재선언하여 사용</li>
+							<li>다른 범주(베이스, 레이아웃, 모듈, 상태)를 덮어쓸 수 있음</li>
+							<li>theme- 등의 접두어를 명시 또는 theme/과 같은 디렉토리로 계층 분리</li> -->
+						</ul>
+                        <pre><code class="css">
+	/* main.css */
+	a {color:#00f}
+	.box {background-color:#fff}
+                        </code></pre>
+                        <pre><code class="css">
+	/* theme.css : main.css 뒤에서 읽도록 */
+	a {color:#f00}
+	.box {background-color:#eee}
+                        </code></pre>
+
+					</section>
 				</section>
+
+
+
+
+					<section>
+						<h2>자바 스크립트 Hooks과 CSS 이름</h2>
+						<p>JavaScript 코드의 어딘가에 이전 클래스 이름 인 siteNavigation과의 관계가 있습니다.</p>
+						<p>따라서 클래스 이름이 변경되면 nav 변수(variable)가 null이됩니다. 이와 같은 경우를 방지하기 위해 개발자는 다른 전략을 제시했습니다.</p>
+
+						<pre><code class="html">
+	<div class="siteNavigation">
+	</div>
+
+	//코드베이스를 리팩터링(refactors)
+	<div class="site-navigation">
+	</div>
+                        </code></pre>
+
+
+						<pre><code class="js">
+	//the Javasript code
+	const nav = document.querySelector('.siteNavigation');
+                        </code></pre>
+					</section>
+
+
+					<section>
+						<h2>js- 클래스 이름 사용</h2>
+						<p>이러한 버그를 완화하는 한 가지 방법은 문제의 DOM 요소(element)와의 관계를 나타 내기 위해 js-* 클래스 이름을 사용하는 것입니다.</p>
+						<p>규약에 따라js-site-navigation 클래스 이름을 보는 사람은 JavaScript 코드에서 DOM 요소(element)와 관계가 있음을 이해합니다.</p>
+
+						<pre><code class="html">
+	<div class="site-navigation js-site-navigation">
+	</div>
+                        </code></pre>
+
+
+						<pre><code class="js">
+	//the Javasript code
+	const nav = document.querySelector('.js-site-navigation');
+                        </code></pre>
+					</section>
+
+
+					<section>
+						<h2>Rel 속성(attribute) 사용</h2>
+						<p>기본적으로 rel 속성(attribute)은 링크 된 자원이 참조하는 문서와의 관계를 정의합니다.
+이전의 John의 예)에서 이 기법을 지지하는 사람들은 이렇게 할 것입니다.</p>
+
+<p>나는 이 기술에 대해 의구심을 가지지 만, 일부 코드베이스에서는 건너 뛰기 쉽습니다.
+ 여기에있는 주장은 "음, 자바 스크립트와의 관계가 있으므로 rel 속성(rel attribute)을 사용하여 이를 나타냅니다."
+웹은 똑같은 문제를 해결하기위한 많은 "방법"이 있는 큰 장소입니다.</p>
+
+						<pre><code class="html">
+	<link rel="stylesheet" type="text/css" href="main.css">
+
+	<div class="site-navigation" rel="js-site-navigation">
+	</div>
+                        </code></pre>
+
+
+						<pre><code class="js">
+	const nav = document.querySelector("[rel='js-site-navigation']");
+                        </code></pre>
+					</section>
 
 
 				<section>
@@ -412,4 +927,4 @@ CSS설계는 매우 중요한 것입니다.
 			});
 		</script>
 	</body>
-</html>
+</html>를

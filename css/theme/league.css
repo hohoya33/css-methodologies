@@ -128,8 +128,12 @@ body {
   font-style: italic; }
 .reveal pre.vertical{
 	float: left;
-	width: 48%;
-	margin-right: 2%;
+	width: 49%;
+	margin-right: 1%;
+}
+.reveal pre.vertical:last-child{
+  width: 50%;
+  margin-right: 0;
 }
 .reveal pre {
   display: block;
