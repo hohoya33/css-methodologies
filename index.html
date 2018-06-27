@@ -131,6 +131,7 @@ CSS설계는 매우 중요한 것입니다.
 						<!-- <p>처음에는 CSS가 쉽다고 느껴질 수도 있습니다. 하지만 시간이 지날수록 CSS가 얼마나 복잡한 언어인지 알게됩니다.</p> -->
 						<ul>
 							<li>적절한 의미 사용 (시맨틱)</li>
+							<li>중첩 선택자</li>
 							<li>모듈화</li>
 							<li>명명 규칙</li>
 							<!-- <li>단일 책임 원칙</li> -->
@@ -154,7 +155,7 @@ CSS설계는 매우 중요한 것입니다.
 						<ul>
 							<li>컨텐츠의 성격과 기능을 전달하는 클래스명</li>
 							<!-- <li>구조적 의미와 기능을 전달하는 클래스명</li> -->
-							<li>이해하기 쉬운 클래스명, 너무 구체적인 것은 안됨</li>
+							<li>이해하기 쉬운 클래스명</li>
 							<li>시맨틱 CSS는 훨씬 더 추상적이고 주관적</li>
 						</ul>
 
@@ -167,14 +168,81 @@ CSS설계는 매우 중요한 것입니다.
 					</section>
 
 
+					<section>
+						<h2>중첩 선택자</h2>
+						<p>만약 선택자가 이렇게 길어진다면, 다음과 같은 CSS를 작성하고 있을 가능성이 높음</p>
+
+						<pre><code class="css">
+	.container .content .profile { ... }
+                        </code></pre>
+
+						<ul>
+							<li>중첩은 최대 3번까지</li>
+							<li>HTML과 밀접하게 엮여있다.</li>
+							<li>너무 구체적이다.</li>
+							<li>재사용할 수 없다.</li>
+						</ul>
+					</section>
+
+					<section>
+						<h2>특정도 평준화</h2>
+						<p>더 높은 특정도 → 특정도 전쟁 → 악순환 → 일일이 찾아야, no ID in CSS</p>
+
+						<table class="table">
+							<thead>
+							<tr class="header">
+							<th>Selector</th>
+							<th>ID (a)</th>
+							<th>Classes (b)</th>
+							<th>Elements (c)</th>
+							<th>Specificity (a-b-c)</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+							<td>p</td>
+							<td>0</td>
+							<td>0</td>
+							<td>1</td>
+							<td>0-0-1</td>
+							</tr>
+							<tr>
+							<td>p#foo</td>
+							<td>1</td>
+							<td>0</td>
+							<td>1</td>
+							<td>1-0-1</td>
+							</tr>
+							<tr>
+							<td>p.bar1</td>
+							<td>0</td>
+							<td>1</td>
+							<td>1</td>
+							<td>0-1-1</td>
+							</tr>
+							<tr>
+							<td>p.bar1.bar2.bar3</td>
+							<td>0</td>
+							<td>3</td>
+							<td>1</td>
+							<td>0-3-1</td>
+							</tr>
+							</tbody>
+						</table>
+
+					</section>
+
+
+
 
 					<section>
 						<h2>모듈화</h2>
 						<ul>
 							<li>디자인을 구성 요소(component)로 분해</li>
 							<li>코드가 분리 될수록 클래스 간의 상호 의존성이 낮음</li>
-							<!-- <li>ID 선택자는 불필요한 특수성을 초래. 재사용 불가능</li> -->
-							<!-- <li>대부분 CSS 선택자로 ID와 태그를 사용하지 말 것을 권장</li> -->
+							<li>ID 보다는 class를 활용 (재사용 불가능)</li>
+							<li>태그 선택자의 사용을 지양</li>
+							<li>탐색레벨을 낮고 단순하게 유지</li>
 						</ul>
 					</section>
 
@@ -749,10 +817,10 @@ Theme 관련해서는 color등 변경되는 class만 모아서 파일로 관리�
 
 					<section>
 						<h2>Base - 기본 규칙</h2>
-						<p>요소 선택자에 적용하는 기본 스타일 (reset.css, nomalize.css)</p>
-						<!-- <ul>
-							<li>사이트 전체 글꼴 크기와 줄 간격, a 요소의 글자 색과 : hover 등 태그에 직접 설정하는 것은 기본 규칙으로 설명</li>
-						</ul> -->
+						<ul>
+							<li>요소(elements) 스타일의 기본값 지정 (reset.css, default.css)</li>
+							<!-- <li>사이트 전체 글꼴 크기와 줄 간격, a 요소의 글자 색과 : hover 등 태그에 직접 설정하는 것은 기본 규칙으로 설명</li> -->
+						</ul>
 
 						<pre><code class="css">
 	body,p,h1,h2,h3,h4,h5,h6,ul,ol,li,dl,dt,dd,table,th,td,form,fieldset,legend,input,
@@ -917,6 +985,16 @@ ID 사용은 피하자
 					<p>각각의 방법론에는 장/단점이 존재하기 때문에 프로젝트에 따라 최적의 방법론을 선택해서 쓰는 것이 중요하다.</p>
 
 					<p>(한 가지의 방법론만 사용하거나, 여러가지 방법론을 조합해서 사용)</p>
+#정리
+
+HTML / CSS 명명 규칙은 어디 까지나 '원칙'으로 일하는 것이므로, 당연히 예외는 나와 버리고 엄격하게 규칙을 따르는 것이 항상 옳다고 할 수 없다고 생각합니다.
+"만들기 쉬움" "가독성" "확장성"등을 균형있게 의식하면서 스스로 기분 좋은 네이밍을 모색합시다.
+결국 최종적으로 가장 중요한 것은 " 쓰고 있고 잘 어울릴지 어떨지"네요!
+쓰고 있고 잘 어울릴지 여부
+결국 마지막으로 가장 중요한 것은 "쓰고있어서 잘 오는 여부"군요!
+결국 최종적으로 가장 중요한 것은 " 쓰고 있고 잘 어울릴지 어떨지"네요!
+
+
 				</section>
 
 
