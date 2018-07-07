@@ -77,7 +77,7 @@
 
 					<section>
 						<h2>CSS 개발의 문제점</h2>
-
+						<p>CSS를 작성하는 것이 쉽지만 한 번 확장하고 관리하기는 어려움</p>
 						<ul>
 							<li>CSS의 전역환경</li>
 							<li>일관적이지 않은 코드 구조, 각자 다른 사고 방식 스타일 정의</li>
@@ -121,7 +121,6 @@ CSS설계는 매우 중요한 것입니다.
 
 					<section>
 						<h2>사이트 규모가 커질수록..</h2>
-						<p>CSS를 작성하는 것이 쉽지만 한 번 확장하고 관리하기는 어려움</p>
 						<p>유지 보수가 불가능한 코드 -> 귀차니즘, 중복, 코드분석 시간 -> 새로운 기능의 개발 속도 저하</p>
 					</section>
 
@@ -475,7 +474,7 @@ OOCSS의 클래스 기반 모듈 건물을 사용할 때 우리는 스타일이 
 						<ul>
 							<!-- <li>코드 재사용성을 높이고, 더 빠르고 효율적이며 추가하기 쉽고 유지보수 용이</li> -->
 							<li>좋은 점 : 재사용함으로써 코드 양을 줄임 (DRY 원칙)</li>
-							<li>나쁜 점 : 특정 요소의 스타일 변경 시 대부분 클래스가 공통적이기 때문에<br>CSS뿐만 아니라 마크업에 클래스를 추가해야 할 가능성이 높음</li>
+							<li>나쁜 점 : 대부분 클래스가 공통적이기 때문에 특정 요소 스타일 변경 시<br>CSS뿐만 아니라 마크업에 클래스를 추가해야 할 가능성이 높음</li>
 						</ul>
 					</section>
 
@@ -490,7 +489,8 @@ OOCSS의 클래스 기반 모듈 건물을 사용할 때 우리는 스타일이 
 
 					<section>
 						<h2>BEM</h2>
-						<p>CSS 클래스를 구조화, 이름을 지정, 코드의 유연성과 유지 관리 가능성을 높이는 방법</p>
+						<p>단순하고 쉽게 이해할 수 있는 견고한 구조를 가진 CSS 작성</p>
+						<!-- <p>CSS 클래스를 구조화, 이름을 지정, 코드의 유연성과 유지 관리 가능성을 높이는 방법</p> -->
 						<ul>
 							<li>Block, Element, Modifier로 나누어 클래스명 기술</li>
 							<li>엄격한 명명 규칙이 특징 (class만 사용. ID, 태그 사용 금지)</li>
@@ -579,21 +579,24 @@ OOCSS의 클래스 기반 모듈 건물을 사용할 때 우리는 스타일이 
 		&lt;div class="stick-man__feet"&gt;&lt;/div&gt;
 	&lt;/div&gt;
                         </code></pre>
-                        <pre class="vertical"><code class="css">
-	.stick-man__head { ... }
-	.stick-man__arms { ... }
-	.stick-man__feet { ... }
-                        </code></pre>
+
                         <pre class="vertical"><code class="css">
 	/* Bad: 의존성 X */
 	.stick-man .stick-man__head { ... }
 	div.stick-man__head { ... }
                         </code></pre>
+
+                        <pre class="vertical"><code class="css">
+	.stick-man__head { ... }
+	.stick-man__arms { ... }
+	.stick-man__feet { ... }
+                        </code></pre>
+
 					</section>
 
 					<section>
-						<h2>요소의 요소를 만들 필요가 있다면..</h2>
-						<p>깊이 최소화 (block__element__element)<br>DOM 트리를 모방 하려고 하지 마세요</p>
+						<h2>깊이 최소화</h2>
+						<p>요소의 요소를 만들 필요가 있다면 (block__element__element X)<br>DOM 트리를 모방 하려고 하지 마세요</p>
                         <pre><code class="html">
 	&lt;!-- Bad --&gt;
 	&lt;div class="stick-man"&gt;
@@ -608,7 +611,7 @@ OOCSS의 클래스 기반 모듈 건물을 사용할 때 우리는 스타일이 
 					</section>
 
 					<section>
-						<h2>새로운 블록 만들기 (중첩 피하기)</h2>
+						<h2>새로운 블록 만들기</h2>
                         <pre><code class="html">
 	&lt;!-- Good --&gt;
 	&lt;div class="stick-man"&gt;
@@ -722,6 +725,7 @@ OOCSS의 클래스 기반 모듈 건물을 사용할 때 우리는 스타일이 
 	/* Block modifier */
 	.stick-man--blue { ... }
 	.stick-man--red { ... }
+	.stick-man--red .stick-man__head { ... }
                         </code></pre>
 					</section>
 
@@ -826,8 +830,8 @@ Theme 관련해서는 color등 변경되는 class만 모아서 파일로 관리�
 							<li>클래스명은 접두사로 l-, layout- 명시 요구</li>
 						</ul>
 
-						<p>ex) l-fixed 유무에 따라 가변 폭으로 할지 고정 폭으로 할지 결정하는 레이아웃</p>
 						<pre><code class="css">
+	/* ex) l-fixed 유무에 따라 가변 폭으로 할지 고정 폭으로 할지 결정하는 레이아웃 */
 	#content {width:80%;float:left}
 	#aside {width:20%}
 
@@ -1036,4 +1040,4 @@ ID 사용은 피하자
 			});
 		</script>
 	</body>
-</html>를
+</html>
